@@ -59,15 +59,62 @@ check_raid() {
 
 #Check % used on each disk partition
 check_disk_perc() {
-  for part in $(df -hl | grep -v 'overlay' | awk -F '%' '{print $2}' | grep /);
-  do
-    disk_used=$(df -h $part | grep $part | awk -F ' ' '{print $5}' | cut -f1 -d "%")
-
-    if [ "$disk_used" -gt "$disk_usage_threshold" ]; then
-#      error_message+="Disk usage above threshold: $part ($disk_used%)\n"
-      error_message+="Disk $part is $disk_used% full\n"
+  if [[ "$disk_usage_threshold_1" ]]; then
+    if [[ "$disk_usage_threshold_1" == *","* ]]; then
+      IFS=','
+      read -r -a parts <<< "$disk_usage_threshold_1"
+      for part in "${parts[@]}";
+      do
+        disk_used=$(df -h $part | awk -F ' ' '{print $5}' | grep "%" | grep -v "Use%" | cut -f1 -d "%")
+        if [ "$disk_used" -gt "$disk_usage_threshold_1_limit" ]; then
+          error_message+="Disk $part is $disk_used% full\n"
+        fi
+      done
+    else
+      disk_used=$(df -h $disk_usage_threshold_1 | awk -F ' ' '{print $5}' | grep "%" | grep -v "Use%" | cut -f1 -d "%")
+      if [ "$disk_used" -gt "$disk_usage_threshold_1_limit" ]; then
+        error_message+="Disk $disk_usage_threshold_1 is $disk_used% full\n"
+      fi
     fi
-  done
+  fi
+
+  if [[ "$disk_usage_threshold_2" ]]; then
+    if [[ "$disk_usage_threshold_2" == *","* ]]; then
+      IFS=','
+      read -r -a parts <<< "$disk_usage_threshold_2"
+      for part in "${parts[@]}";
+      do
+        disk_used=$(df -h $part | awk -F ' ' '{print $5}' | grep "%" | grep -v "Use%" | cut -f1 -d "%")
+        if [ "$disk_used" -gt "$disk_usage_threshold_2_limit" ]; then
+          error_message+="Disk $part is $disk_used% full\n"
+        fi
+      done
+    else
+      disk_used=$(df -h $disk_usage_threshold_2 | awk -F ' ' '{print $5}' | grep "%" | grep -v "Use%" | cut -f1 -d "%")
+      if [ "$disk_used" -gt "$disk_usage_threshold_2_limit" ]; then
+        error_message+="Disk $disk_usage_threshold_2 is $disk_used% full\n"
+      fi
+    fi
+  fi
+
+  if [[ "$disk_usage_threshold_3" ]]; then
+    if [[ "$disk_usage_threshold_3" == *","* ]]; then
+      IFS=','
+      read -r -a parts <<< "$disk_usage_threshold_3"
+      for part in "${parts[@]}";
+      do
+        disk_used=$(df -h $part | awk -F ' ' '{print $5}' | grep "%" | grep -v "Use%" | cut -f1 -d "%")
+        if [ "$disk_used" -gt "$disk_usage_threshold_3_limit" ]; then
+          error_message+="Disk $part is $disk_used% full\n"
+        fi
+      done
+    else
+      disk_used=$(df -h $disk_usage_threshold_3 | awk -F ' ' '{print $5}' | grep "%" | grep -v "Use%" | cut -f1 -d "%")
+      if [ "$disk_used" -gt "$disk_usage_threshold_3_limit" ]; then
+        error_message+="Disk $disk_usage_threshold_3 is $disk_used% full\n"
+      fi
+    fi
+  fi
 }
 
 #Check if ZFS pool is healthy
