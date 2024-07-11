@@ -85,15 +85,19 @@ check_zfs_pool() {
 send_ntfy() {
   if [[ "$error_message" && "$ntfy_priority" && "$ntfy_url" && "$ntfy_topic" ]]; then
     if [[ "$ntfy_user" && "$ntfy_password" ]]; then
-#      curl -u "$ntfy_user:$ntfy_password" -H "X-Tags: warning" -H "X-Title: System checkup" -H "X-Priority: $ntfy_priority" -d "$error_message" "$ntfy_url/$ntfy_topic"
 
-	curl -H "Content-Type:application/json" \
+	curl -H "Content-Type: application/json" \
 	     -u "$ntfy_user:$ntfy_password" \
 	     -d "$(ntfy_message)" \
 	     $ntfy_url
 
     elif [[ -v "$ntfy_accesstoken" ]]; then
-      curl -H "Authorization: Bearer $ntfy_accesstoken" -H "X-Tags: warning" -H "X-Title: System checkup" -H "X-Priority: $ntfy_priority" -d "$error_message" "$ntfy_url/$ntfy_topic"
+
+	curl -H "Content-Type: application/json" \
+	     -H "Authorization: Bearer $ntfy_accesstoken" \
+	     -d "$(ntfy_message)" \
+	     $ntfy_url
+
     fi
   fi
 }
