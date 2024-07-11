@@ -14,10 +14,10 @@ Notifications:
 - Pushover
 
 
-# Usage
+## Usage
 Download the script and .env, change the variables in .env to your liking, and probably set it up as a cron job on whatever bash-friendly machines you want to monitor
 
-# Preview
+## Preview
 ntfy:
 
 ![image](https://github.com/user-attachments/assets/d0b7bcd9-3a09-45c9-ad2c-6cccfde74141)
