@@ -14,5 +14,5 @@ Notifications:
 - Pushover
 
 
-#Usage
+# Usage
 Download the script and .env, change the variables in .env to your liking, and probably set it up as a cron job on whatever bash-friendly machines you want to monitor
