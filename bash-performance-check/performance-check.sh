@@ -1,42 +1,38 @@
 #!/usr/bin/env bash
 
-source $(dirname "$0")/.env
+source .env
+error_message=""
 
 #Check system load
 check_load() {
-  error_message=""
   uptime=$(uptime)
-  load1=$(echo "$uptime" | awk -F 'load average:' '{print $2}' | awk '{print $1}' | awk -F '.' '{print $1}' | sed 's_,__')
-  load1_decimal=$(echo "$uptime" | awk -F 'load average:' '{print $2}' | awk '{print $1}' | awk -F '.' '{print $2}' | sed 's_,__')
-  load2=$(echo "$uptime" | awk -F 'load average:' '{print $2}' | awk '{print $2}' | awk -F '.' '{print $1}' | sed 's_,__')
-  load2_decimal=$(echo "$uptime" | awk -F 'load average:' '{print $2}' | awk '{print $1}' | awk -F '.' '{print $2}' | sed 's_,__')
-  load3=$(echo "$uptime" | awk -F 'load average:' '{print $2}' | awk '{print $3}' | awk -F '.' '{print $1}' )
-  load3_decimal=$(echo "$uptime" | awk -F 'load average:' '{print $2}' | awk '{print $1}' | awk -F '.' '{print $2}' | sed 's_,__')
 
-  if [ "$load1" -gt "$load_5m_threshold" ]; then
-    error_message+="Load (5m) too high: $load1.$load1_decimal\n"
+  load_5m_integral=$(echo "$uptime" | awk -F 'load average:' '{print $2}' | awk '{print $1}' | awk -F '.' '{print $1}' | sed 's_,__')
+  load_5m_fractional=$(echo "$uptime" | awk -F 'load average:' '{print $2}' | awk '{print $1}' | awk -F '.' '{print $2}' | sed 's_,__')
+  load_5m_threshold_integral=$(echo "$load_5m_threshold" | cut -f1 -d '.')
+  load_5m_threshold_fractional=$(echo "$load_5m_threshold" | awk -F '.' '{print $2}')
+
+  load_10m_integral=$(echo "$uptime" | awk -F 'load average:' '{print $2}' | awk '{print $2}' | awk -F '.' '{print $1}' | sed 's_,__')
+  load_10m_fractional=$(echo "$uptime" | awk -F 'load average:' '{print $2}' | awk '{print $2}' | awk -F '.' '{print $2}' | sed 's_,__')
+  load_10m_threshold_integral=$(echo "$load_10m_threshold" | cut -f1 -d '.')
+  load_10m_threshold_fractional=$(echo "$load_10m_threshold" | awk -F '.' '{print $2}')
+
+  load_15m_integral=$(echo "$uptime" | awk -F 'load average:' '{print $2}' | awk '{print $3}' | awk -F '.' '{print $1}' )
+  load_15m_fractional=$(echo "$uptime" | awk -F 'load average:' '{print $2}' | awk '{print $3}' | awk -F '.' '{print $2}' | sed 's_,__')
+  load_15m_threshold_integral=$(echo "$load_15m_threshold" | cut -f1 -d '.')
+  load_15m_threshold_fractional=$(echo "$load_15m_threshold" | awk -F '.' '{print $2}')
+
+  if [[ "$load_5m_integral" -ge "$load_5m_threshold_integral" && "$load_5m_fractional" -ge "$load_5m_threshold_fractional" ]]; then
+    error_message+="Load (5m) too high: $load_5m_integral.$load_5m_fractional\n"
   fi
 
-  if [ "$load2" -gt "$load_10m_threshold" ]; then
-    error_message+="Load (10m) too high: $load2.$load2_decimal\n"
+  if [[ "$load_10m_integral" -ge "$load_10m_threshold_integral" && "$load_10m_fractional" -ge "$load_10m_threshold_fractional" ]]; then
+    error_message+="Load (10m) too high: $load_10m_integral.$load_10m_fractional\n"
   fi
 
-  if [ "$load3" -gt "$load_15m_threshold" ]; then
-    error_message+="Load (15m) too high: $load3.$load3_decimal\n"
+  if [[ "$load_15m_integral" -ge "$load_15m_threshold_integral" && "$load_15m_fractional" -ge "$load_15m_threshold_fractional" ]]; then
+    error_message+="Load (15m) too high: $load_15m_integral.$load_15m_fractional\n"
   fi
-}
-
-#Check used RAM
-check_memory() {
-  total_mem=$(free | grep Mem | awk -F 'Mem:' '{print $2}' | awk '{print $1}')
-  used_mem=$(free | grep Mem | awk -F 'Mem:' '{print $2}' | awk '{print $2}')
-
-  percentage_used_mem=$(echo "scale=2; $used_mem / $total_mem * 100" | bc | cut -f1 -d ".")
-
-  if [ "$percentage_used_mem" -gt "$ram_usage_threshold" ]; then
-    error_message+="RAM usage above limit: $percentage_used_mem%\n"
-  fi
-
 }
 
 #Check CPU % used
