@@ -1,2 +1,5 @@
+2024-07-13
+- Modified load check to support decimal thresholds
+
 2024-07-12
 - Revamped disk checks. You can now specify 3 different thresholds with specified partitions for each threshold 
