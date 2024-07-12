@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source .env
+source $(dirname "$0")/.env
 
 #Check system load
 check_load() {
