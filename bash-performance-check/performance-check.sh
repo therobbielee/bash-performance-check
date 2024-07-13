@@ -44,6 +44,19 @@ check_cpu_perc() {
   fi
 }
 
+#Check used RAM
+check_memory() {
+  total_mem=$(free | grep Mem | awk -F 'Mem:' '{print $2}' | awk '{print $1}')
+  used_mem=$(free | grep Mem | awk -F 'Mem:' '{print $2}' | awk '{print $2}')
+
+  percentage_used_mem=$(echo "scale=2; $used_mem / $total_mem * 100" | bc | cut -f1 -d ".")
+
+  if [ "$percentage_used_mem" -gt "$ram_usage_threshold" ]; then
+    error_message+="RAM usage above limit: $percentage_used_mem%\n"
+  fi
+
+}
+
 #Check if RAID is degraded
 check_raid() {
   raid_status=$(grep "\[.*_-*\]" /proc/mdstat -c)
