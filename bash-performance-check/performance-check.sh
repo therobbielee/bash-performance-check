@@ -39,7 +39,7 @@ check_load() {
 check_cpu_perc() {
   cpu_used_percentage=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}' | cut -f1 -d ".")
 
-  if [ "$cpu_usage_threshold" -gt "$cpu_used_percentage" ]; then
+  if [ "$cpu_used_percentage" -gt "$cpu_usage_threshold" ]; then
     error_message+="CPU usage above limit: $cpu_used_percentage%\n"
   fi
 }
