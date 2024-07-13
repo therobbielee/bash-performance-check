@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source .env
+source $(dirname "$0")/.env
 error_message=""
 
 #Check system load
