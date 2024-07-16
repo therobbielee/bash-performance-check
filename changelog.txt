@@ -1,3 +1,10 @@
+2024-07-16
+- Added action button for ntfy notifications
+You will now see a "SHOW PROCESSLIST" button on CPU%, RAM% and Load related warnings
+Clicking the button sends a notification to the ntfy topic specified with ntfy_action_* env variables.
+If a CPU%, RAM% or Load warning is sent, the server will poll the topic every 5 seconds for 90 seconds total to look for a "Show processlist"-request.
+If no request is found within the 90 seconds, when the script is run, it checks once.
+
 2024-07-13
 - Modified load check to support decimal thresholds
 
