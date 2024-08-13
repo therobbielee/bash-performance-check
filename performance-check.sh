@@ -2,6 +2,7 @@
 
 source $(dirname "$0")/.env
 error_message=""
+hostname=$(cat /etc/hostname)
 processes=()
 
 #Check system load
@@ -226,7 +227,7 @@ send_ntfy() {
 #Send notification to Pushover
 send_pushover() {
   if [[ "$error_message" && "$pushover_userkey" && "$pushover_apptoken" ]]; then
-        curl -s --form-string "token=$pushover_apptoken" --form-string "user=$pushover_userkey" --form-string "message=$(echo -e $error_message)" https://api.pushover.net/1/messages.json
+        curl -s --form-string "token=$pushover_apptoken" --form-string "user=$pushover_userkey" --form-string "message=$(echo -e $hostname : $error_message)" https://api.pushover.net/1/messages.json
   fi
 }
 
@@ -306,7 +307,7 @@ ntfy_message() {
 {
   "topic": "$ntfy_topic",
   "tags": ["warning"],
-  "title": "System Checkup",
+  "title": "System Checkup: $hostname",
   "message": "$error_message"
 }
 EOF
@@ -317,7 +318,7 @@ ntfy_message_processes() {
 {
   "topic": "$ntfy_topic",
   "tags": ["magic_wand"],
-  "title": "System Checkup",
+  "title": "System Checkup: $hostname",
   "message": "$processes"
 }
 EOF

@@ -1,3 +1,6 @@
+2024-08-13
+- Added hostname to notifications
+
 2024-07-16
 - Added action button for ntfy notifications
 You will now see a "SHOW PROCESSLIST" button on CPU%, RAM% and Load related warnings
