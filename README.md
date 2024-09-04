@@ -1,5 +1,5 @@
 # Performance checker
-A performance checker written in bash
+A performance checker with recovery notifications, written in bash
 
 Checks:
 - CPU %
