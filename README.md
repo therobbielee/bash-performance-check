@@ -27,4 +27,3 @@ Pushover:
 ![image](https://github.com/user-attachments/assets/7c66122b-84f6-4379-8e87-da1772f86252)
 
 ## To-do
-- Don't send repeat load warnings for the same incident
