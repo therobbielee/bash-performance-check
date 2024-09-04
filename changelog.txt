@@ -1,3 +1,9 @@
+2024-09-04
+- Added SQLite3 database for storing status and history information
+- Added recovery notifications
+- Defined a unique identifier to know which device is asked for processlist through action button
+- Added new ENV var "repeat_notifications", if set to false, it will only send 1 warning per check until that check is recovered
+
 2024-08-13
 - Added hostname to notifications
 
