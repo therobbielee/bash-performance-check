@@ -87,7 +87,7 @@ check_load() {
     if [ "$(sqlite3 "$(dirname "$0")/performance-check.db" "SELECT recovered FROM notifications WHERE type = 'load_10m'")" == 'false' ]; then
       recovery_message+="Load (10m) recovered: $load_10m_integral.$load_10m_fractional\n"
       load_recovery_var="true"
-      sqlite3 "'$(dirname $0)/performance-check.db' 'UPDATE notifications SET recovered = 'true' WHERE type = 'load_10m'"
+      sqlite3 "$(dirname $0)/performance-check.db" "UPDATE notifications SET recovered = 'true' WHERE type = 'load_10m'"
     fi
   fi
 

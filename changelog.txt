@@ -1,3 +1,6 @@
+2024-10-07
+- Fixed an issue with recovery of 10m load check
+
 2024-09-04
 - Added SQLite3 database for storing status and history information
 - Added recovery notifications
